@@ -1,4 +1,4 @@
-/* $XdotOrg: xc/programs/Xserver/hw/xfree86/input/keyboard/kbd.c,v 1.6 2004/08/31 01:36:13 kem Exp $ */
+/* $XdotOrg$ */
 /* $XFree86: xc/programs/Xserver/hw/xfree86/input/keyboard/kbd.c,v 1.8 2003/11/03 05:11:47 tsi Exp $ */
 
 /*
@@ -12,7 +12,7 @@
  * xf86Events.c and xf86Io.c which are
  * Copyright 1990,91 by Thomas Roell, Dinkelscherben, Germany.
  */
-/* $XdotOrg: xc/programs/Xserver/hw/xfree86/input/keyboard/kbd.c,v 1.6 2004/08/31 01:36:13 kem Exp $ */
+/* $XdotOrg$ */
   
 #define NEED_EVENTS
 #include "X.h"
@@ -135,7 +135,7 @@ static const char *kbdDefaults[] = {
     "Protocol",		"standard",
     "AutoRepeat",	"500 30",
     "XkbRules",		__XKBDEFRULES__,
-    "XkbModel",		"pc101",
+    "XkbModel",		"pc105",
     "XkbLayout",	"us",
     "Panix106",		"off",
     "CustomKeycodes",	"off",
@@ -372,6 +372,7 @@ KbdCtrl( DeviceIntPtr device, KeybdCtrl *ctrl)
   }
 #endif
   pKbd->SetLeds(pInfo, pKbd->leds);
+  pKbd->autoRepeat = ctrl->autoRepeat;
 
   return (Success);
 }
@@ -720,14 +721,14 @@ PostKbdEvent(InputInfoPtr pInfo, unsigned int scanCode, Bool down)
   /*
    * check for an autorepeat-event
    */
-  if (down) {
+  if (down && KeyPressed(keycode)) {
       int num = keycode >> 3;
       int bit = 1 << (keycode & 7);
-      if ((keyc->down[num] & bit) &&
-          ((kbdfeed->ctrl.autoRepeat != AutoRepeatModeOn) ||
-            keyc->modifierMap[keycode] ||
-            !(kbdfeed->ctrl.autoRepeats[num] & bit)))
-          return;
+
+      if ((pKbd->autoRepeat != AutoRepeatModeOn) ||
+	  keyc->modifierMap[keycode] ||
+	  !(kbdfeed->ctrl.autoRepeats[num] & bit))
+	  return;
   }
 
    if (UsePrefix) {
