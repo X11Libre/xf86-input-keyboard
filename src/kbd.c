@@ -1,3 +1,4 @@
+/* $XdotOrg: xc/programs/Xserver/hw/xfree86/input/keyboard/kbd.c,v 1.6 2004/08/31 01:36:13 kem Exp $ */
 /* $XFree86: xc/programs/Xserver/hw/xfree86/input/keyboard/kbd.c,v 1.8 2003/11/03 05:11:47 tsi Exp $ */
 
 /*
@@ -11,7 +12,7 @@
  * xf86Events.c and xf86Io.c which are
  * Copyright 1990,91 by Thomas Roell, Dinkelscherben, Germany.
  */
-/* $XdotOrg: xc/programs/Xserver/hw/xfree86/input/keyboard/kbd.c,v 1.1.4.2.4.1 2004/03/04 17:48:05 eich Exp $ */
+/* $XdotOrg: xc/programs/Xserver/hw/xfree86/input/keyboard/kbd.c,v 1.6 2004/08/31 01:36:13 kem Exp $ */
   
 #define NEED_EVENTS
 #include "X.h"
@@ -58,10 +59,19 @@ static void InitKBD(InputInfoPtr pInfo, Bool init);
 static void SetXkbOption(InputInfoPtr pInfo, char *name, char **option);
 static void UpdateLeds(InputInfoPtr pInfo);
 
-#undef KEYBOARD
-InputDriverRec KEYBOARD = {
+InputDriverRec KBD = {
 	1,
 	"kbd",
+	NULL,
+	KbdPreInit,
+	NULL,
+	NULL,
+	0
+};
+
+InputDriverRec KEYBOARD = {
+	1,
+	"keyboard",
 	NULL,
 	KbdPreInit,
 	NULL,
@@ -578,6 +588,19 @@ PostKbdEvent(InputInfoPtr pInfo, unsigned int scanCode, Bool down)
 	      return;
   }
   
+#ifndef __sparc64__
+  /*
+   * PC keyboards generate separate key codes for
+   * Alt+Print and Control+Pause but in the X keyboard model
+   * they need to get the same key code as the base key on the same
+   * physical keyboard key.
+   */
+  if (scanCode == KEY_SysReqest)
+    scanCode = KEY_Print;
+  else if (scanCode == KEY_Break)
+    scanCode = KEY_Pause;
+#endif
+
   /*
    * Now map the scancodes to real X-keycodes ...
    */
@@ -719,7 +742,7 @@ PostKbdEvent(InputInfoPtr pInfo, unsigned int scanCode, Bool down)
 }
 
 #ifdef XFree86LOADER
-ModuleInfoRec KeyboardInfo = {
+ModuleInfoRec KbdInfo = {
     1,
     "KBD",
     NULL,
@@ -745,6 +768,62 @@ xf86KbdPlug(pointer	module,
 #ifndef REMOVE_LOADER_CHECK_MODULE_INFO
 	if (xf86LoaderCheckSymbol("xf86AddModuleInfo"))
 #endif
+	xf86AddModuleInfo(&KbdInfo, module);
+    }
+
+    xf86AddInputDriver(&KBD, module, 0);
+
+    return module;
+}
+
+static XF86ModuleVersionInfo xf86KbdVersionRec =
+{
+    "kbd",
+    MODULEVENDORSTRING,
+    MODINFOSTRING1,
+    MODINFOSTRING2,
+    XORG_VERSION_CURRENT,
+    1, 0, 0,
+    ABI_CLASS_XINPUT,
+    ABI_XINPUT_VERSION,
+    MOD_CLASS_XINPUT,
+    {0, 0, 0, 0}		/* signature, to be patched into the file by */
+				/* a tool */
+};
+
+XF86ModuleData kbdModuleData = {
+    &xf86KbdVersionRec,
+    xf86KbdPlug,
+    xf86KbdUnplug
+};
+
+
+/* Compatibility section: we have a set of module structures here that
+ * allows us to load this module as the old keyboard driver. */
+
+#ifndef USE_DEPRECATED_KEYBOARD_DRIVER
+
+ModuleInfoRec KeyboardInfo = {
+    1,
+    "KEYBOARD",
+    NULL,
+    0,
+    KeyboardAvailableOptions,
+};
+
+static pointer
+xf86KeyboardPlug(pointer	module,
+                 pointer	options,
+                 int		*errmaj,
+                 int		*errmin)
+{
+    static Bool Initialised = FALSE;
+
+    if (!Initialised) {
+	Initialised = TRUE;
+#ifndef REMOVE_LOADER_CHECK_MODULE_INFO
+	if (xf86LoaderCheckSymbol("xf86AddModuleInfo"))
+#endif
 	xf86AddModuleInfo(&KeyboardInfo, module);
     }
 
@@ -755,11 +834,11 @@ xf86KbdPlug(pointer	module,
 
 static XF86ModuleVersionInfo xf86KeyboardVersionRec =
 {
-    "kbd",
+    "keyboard",
     MODULEVENDORSTRING,
     MODINFOSTRING1,
     MODINFOSTRING2,
-    XF86_VERSION_CURRENT,
+    XORG_VERSION_CURRENT,
     1, 0, 0,
     ABI_CLASS_XINPUT,
     ABI_XINPUT_VERSION,
@@ -768,8 +847,12 @@ static XF86ModuleVersionInfo xf86KeyboardVersionRec =
 				/* a tool */
 };
 
-XF86ModuleData kbdModuleData = {&xf86KeyboardVersionRec,
-				     xf86KbdPlug,
-				     xf86KbdUnplug};
+XF86ModuleData keyboardModuleData = {
+    &xf86KeyboardVersionRec,
+    xf86KeyboardPlug,
+    xf86KbdUnplug
+};
+
+#endif /* ! USE_DEPRECATED_KEYBOARD_DRIVER */
 
 #endif /* XFree86LOADER */
