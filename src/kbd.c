@@ -1,4 +1,4 @@
-/* $XdotOrg: xc/programs/Xserver/hw/xfree86/input/keyboard/kbd.c,v 1.9 2003/12/18 21:53:45 dawes Exp $ */
+/* $XdotOrg$ */
 /* $XFree86: xc/programs/Xserver/hw/xfree86/input/keyboard/kbd.c,v 1.8 2003/11/03 05:11:47 tsi Exp $ */
 
 /*
@@ -12,6 +12,7 @@
  * xf86Events.c and xf86Io.c which are
  * Copyright 1990,91 by Thomas Roell, Dinkelscherben, Germany.
  */
+/* $XdotOrg$ */
   
 #define NEED_EVENTS
 #include "X.h"
@@ -124,7 +125,7 @@ static const OptionInfoRec KeyboardOptions[] = {
 static const char *kbdDefaults[] = {
     "Protocol",		"standard",
     "AutoRepeat",	"500 30",
-    "XkbRules",		"xfree86",
+    "XkbRules",		__XKBDEFRULES__,
     "XkbModel",		"pc101",
     "XkbLayout",	"us",
     "Panix106",		"off",
@@ -759,7 +760,7 @@ static XF86ModuleVersionInfo xf86KeyboardVersionRec =
     MODULEVENDORSTRING,
     MODINFOSTRING1,
     MODINFOSTRING2,
-    XF86_VERSION_CURRENT,
+    XORG_VERSION_CURRENT,
     1, 0, 0,
     ABI_CLASS_XINPUT,
     ABI_XINPUT_VERSION,
