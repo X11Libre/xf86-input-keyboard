@@ -14,7 +14,7 @@ kbd \- Keyboard input driver
 .fi
 .SH DESCRIPTION
 .B kbd 
-is an XFree86 input driver for keyboards.  The driver supports the standard
+is an __xservername__ input driver for keyboards.  The driver supports the standard
 OS-provided keyboard interface, but these are currently only available to
 this driver module for Linux and BSD.  This driver is experimental, but
 will soon replace the built-in
@@ -26,7 +26,7 @@ The
 driver functions as a keyboard input device, and may be used as the
 X server's core keyboard.
 .SH CONFIGURATION DETAILS
-Please refer to XF86Config(__filemansuffix__) for general configuration
+Please refer to __xconfigfile__(__filemansuffix__) for general configuration
 details and for options that can be used with all input drivers.  This
 section only covers configuration details specific to this driver.
 .PP
@@ -96,4 +96,4 @@ Some other XKB-related options are available, but they are incompatible
 with the ones listed above and are not recommended, so they are not
 documented here.
 .SH "SEE ALSO"
-keyboard(__drivermansuffix__), XFree86(1), XF86Config(__filemansuffix__), xf86config(1), Xserver(1), X(__miscmansuffix__).
+keyboard(__drivermansuffix__), __xservername__(__appmansuffix__), __xconfigfile__(__filemansuffix__), xorgconfig(__appmansuffix__), Xserver(__appmansuffix__), X(__miscmansuffix__).
