@@ -1,4 +1,4 @@
-.\" $XFree86: xc/programs/Xserver/hw/xfree86/input/keyboard/kbd.man,v 1.1 2002/10/11 01:40:33 dawes Exp $ 
+.\" $XFree86: xc/programs/Xserver/hw/xfree86/input/keyboard/keyboard.man,v 1.2 2001/01/27 18:20:57 dawes Exp $ 
 .\" shorthand for double quote that works everywhere.
 .ds q \N'34'
 .TH KBD __drivermansuffix__ __vendorversion__

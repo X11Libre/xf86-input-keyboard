@@ -1,3 +1,4 @@
+/* $XdotOrg: xc/programs/Xserver/hw/xfree86/input/keyboard/kbd.c,v 1.1.4.2.4.2 2004/03/04 20:16:40 kaleb Exp $ */
 /* $XFree86: xc/programs/Xserver/hw/xfree86/input/keyboard/kbd.c,v 1.8 2003/11/03 05:11:47 tsi Exp $ */
 
 /*
@@ -424,7 +425,8 @@ InitKBD(InputInfoPtr pInfo, Bool init)
       else if (pKbd->rate >= 30)   rad |= 0x00;
       else                         rad |= ((58 / pKbd->rate) - 2);
       pKbd->SetKbdRepeat(pInfo, rad);
-    }
+  } else
+      UpdateLeds(pInfo);
 }
 
 static int
