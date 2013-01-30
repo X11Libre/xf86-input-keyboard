@@ -422,6 +422,11 @@ jstkDeviceControlProc(DeviceIntPtr       pJstk,
         pJstk->public.on = FALSE;
         break;
 
+#if GET_ABI_MAJOR(ABI_XINPUT_VERSION) * 100 + GET_ABI_MINOR(ABI_XINPUT_VERSION) >= 1901
+    case DEVICE_ABORT:
+        break;
+#endif
+
     default:
         ErrorF("unsupported mode=%d\n", what);
         return BadValue;
