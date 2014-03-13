@@ -49,7 +49,6 @@
 #include "backend_joystick.h"
 
 
-static void jstkCloseDevice_joystick(JoystickDevPtr joystick);
 static int jstkReadData_joystick(JoystickDevPtr joystick,
                                  JOYSTICKEVENT *event,
                                  int *number);
@@ -82,7 +81,7 @@ jstkOpenDevice_joystick(JoystickDevPtr joystick, Bool probe)
     if (ioctl(joystick->fd, JSIOCGVERSION, &driver_version) == -1) {
         xf86Msg(X_ERROR, "Joystick: ioctl JSIOCGVERSION on '%s' failed: %s\n", 
                 joystick->device, strerror(errno));
-        jstkCloseDevice_joystick(joystick);
+        jstkCloseDevice(joystick);
         return -1;
     }
     if ((driver_version >> 16) < 1) {
@@ -95,21 +94,21 @@ jstkOpenDevice_joystick(JoystickDevPtr joystick, Bool probe)
     if (ioctl(joystick->fd, JSIOCGAXES, &axes) == -1) {
         xf86Msg(X_ERROR, "Joystick: ioctl JSIOCGAXES on '%s' failed: %s\n", 
                 joystick->device, strerror(errno));
-        jstkCloseDevice_joystick(joystick);
+        jstkCloseDevice(joystick);
         return -1;
     }
 
     if (ioctl(joystick->fd, JSIOCGBUTTONS, &buttons) == -1) {
         xf86Msg(X_ERROR, "Joystick: ioctl JSIOCGBUTTONS on '%s' failed: %s\n", 
                 joystick->device, strerror(errno));
-        jstkCloseDevice_joystick(joystick);
+        jstkCloseDevice(joystick);
         return -1;
     }
 
     if (ioctl(joystick->fd, JSIOCGNAME(128), joy_name) == -1) {
         xf86Msg(X_ERROR, "Joystick: ioctl JSIOCGNAME on '%s' failed: %s\n", 
                   joystick->device, strerror(errno));
-        jstkCloseDevice_joystick(joystick);
+        jstkCloseDevice(joystick);
         return -1;
     }
 
@@ -127,27 +126,8 @@ jstkOpenDevice_joystick(JoystickDevPtr joystick, Bool probe)
 
     joystick->open_proc = jstkOpenDevice_joystick;
     joystick->read_proc = jstkReadData_joystick;
-    joystick->close_proc = jstkCloseDevice_joystick;
+    joystick->close_proc = jstkCloseDevice;
     return joystick->fd;
-}
-
-
-/***********************************************************************
- *
- * jstkCloseDevice --
- *
- * close the handle.
- *
- ***********************************************************************
- */
-
-static void
-jstkCloseDevice_joystick(JoystickDevPtr joystick)
-{
-    if ((joystick->fd >= 0)) {
-        xf86CloseSerial(joystick->fd);
-        joystick->fd = -1;
-    }
 }
 
 

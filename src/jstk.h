@@ -123,4 +123,6 @@ typedef struct _JoystickDevRec {
     BUTTON button[MAXBUTTONS];    /* Configuration per button */
 } JoystickDevRec;
 
+void jstkCloseDevice(JoystickDevPtr priv);
+
 #endif

@@ -209,10 +209,7 @@ jstkOpenDevice_bsd(JoystickDevPtr joystick, Bool probe)
 static void
 jstkCloseDevice_bsd(JoystickDevPtr joystick)
 {
-    if ((joystick->fd >= 0)) {
-      xf86CloseSerial(joystick->fd);
-      joystick->fd = -1;
-    }
+    jstkCloseDevice(joystick);
     if (joystick->devicedata != NULL) {
         if (((struct jstk_bsd_hid_data*)joystick->devicedata)->data_buf)
             free(((struct jstk_bsd_hid_data*)joystick->devicedata)->data_buf);

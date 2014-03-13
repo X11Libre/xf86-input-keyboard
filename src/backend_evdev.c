@@ -210,10 +210,7 @@ jstkOpenDevice_evdev(JoystickDevPtr joystick, Bool probe)
 static void
 jstkCloseDevice_evdev(JoystickDevPtr joystick)
 {
-    if ((joystick->fd >= 0)) {
-        xf86CloseSerial(joystick->fd);
-        joystick->fd = -1;
-    }
+    jstkCloseDevice(joystick);
     if (joystick->devicedata) {
         free(joystick->devicedata);
         joystick->devicedata = NULL;

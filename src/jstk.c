@@ -34,6 +34,7 @@
 #include <xf86Xinput.h>
 #include <exevents.h>		/* Needed for InitValuator/Proximity stuff */
 #include <xf86Opt.h>
+#include <xf86_OSproc.h>
 
 #include <math.h>
 #include <xf86Module.h>
@@ -98,6 +99,23 @@ jstkOpenDevice(JoystickDevPtr priv, BOOL probe)
     return fd;
 }
 
+/*
+ ***************************************************************************
+ *
+ * jstkCloseDevice --
+ *
+ * Called to close the device specified in priv, this is a helper for
+ * backend proc_close functions
+ *
+ ***************************************************************************
+ */
+void jstkCloseDevice(JoystickDevPtr priv)
+{
+    if ((priv->fd >= 0)) {
+      xf86CloseSerial(priv->fd);
+      priv->fd = -1;
+    }
+}
 
 /*
  ***************************************************************************
