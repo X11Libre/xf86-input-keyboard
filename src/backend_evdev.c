@@ -99,16 +99,14 @@ jstkOpenDevice_evdev(JoystickDevPtr joystick, Bool probe)
     if (ioctl(joystick->fd, EVIOCGVERSION, &driver_version) == -1) {
         xf86Msg(X_ERROR, "Joystick: ioctl EVIOCGVERSION on '%s' failed: %s\n", 
                 joystick->device, strerror(errno));
-        close(joystick->fd);
-        joystick->fd = -1;
+        jstkCloseDevice_evdev(joystick);
         return -1;
     }
 
     if (ioctl(joystick->fd, EVIOCGID, &id) == -1) {
         xf86Msg(X_ERROR, "Joystick: ioctl EVIOCGID on '%s' failed: %s\n",
                 joystick->device, strerror(errno));
-        close(joystick->fd);
-        joystick->fd = -1;
+        jstkCloseDevice_evdev(joystick);
         return -1;
     }
 
@@ -118,13 +116,14 @@ jstkOpenDevice_evdev(JoystickDevPtr joystick, Bool probe)
     {
         xf86Msg(X_ERROR, "Joystick: ioctl EVIOCGBIT on '%s' failed: %s\n",
                 joystick->device, strerror(errno));
-        close(joystick->fd);
-        joystick->fd = -1;
+        jstkCloseDevice_evdev(joystick);
         return -1;
     }
 
     evdevdata = (struct jstk_evdev_data*)
                 malloc(sizeof(struct jstk_evdev_data));
+    joystick->devicedata = (void*) evdevdata;
+
     for (axes=0; axes<ABS_MAX; axes++)
     {
         evdevdata->axis[axes].number = -1;
@@ -144,9 +143,7 @@ jstkOpenDevice_evdev(JoystickDevPtr joystick, Bool probe)
             if (ioctl(joystick->fd, EVIOCGABS(j), &absinfo) == -1) {
                 xf86Msg(X_ERROR, "Joystick: ioctl EVIOCGABS on '%s' failed: %s\n",
                         joystick->device, strerror(errno));
-                close(joystick->fd);
-                joystick->fd = -1;
-                free(evdevdata);
+                jstkCloseDevice_evdev(joystick);
                 return -1;
             }
             evdevdata->axis[j].number = axes; /* physical -> logical mapping */
@@ -163,8 +160,7 @@ jstkOpenDevice_evdev(JoystickDevPtr joystick, Bool probe)
     {
         xf86Msg(X_ERROR, "Joystick: ioctl EVIOCGBIT on '%s' failed: %s\n",
                 joystick->device, strerror(errno));
-        close(joystick->fd);
-        joystick->fd = -1;
+        jstkCloseDevice_evdev(joystick);
         return -1;
     }
     buttons = 0; /* Our logical index */
@@ -191,7 +187,6 @@ jstkOpenDevice_evdev(JoystickDevPtr joystick, Bool probe)
     joystick->open_proc = jstkOpenDevice_evdev;
     joystick->read_proc = jstkReadData_evdev;
     joystick->close_proc = jstkCloseDevice_evdev;
-    joystick->devicedata = (void*) evdevdata;
 
     if (buttons > MAXBUTTONS)
         buttons = MAXBUTTONS;
@@ -217,11 +212,11 @@ jstkCloseDevice_evdev(JoystickDevPtr joystick)
 {
     if ((joystick->fd >= 0)) {
         xf86CloseSerial(joystick->fd);
-        if (joystick->devicedata) {
-            free(joystick->devicedata);
-            joystick->devicedata = NULL;
-        }
         joystick->fd = -1;
+    }
+    if (joystick->devicedata) {
+        free(joystick->devicedata);
+        joystick->devicedata = NULL;
     }
 }
 

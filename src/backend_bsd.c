@@ -100,29 +100,27 @@ jstkOpenDevice_bsd(JoystickDevPtr joystick, Bool probe)
     if ((rd = hid_get_report_desc(joystick->fd)) == 0) {
         xf86Msg(X_ERROR, "Joystick: hid_get_report_desc failed: %s\n",
                 strerror(errno));
-        close(joystick->fd);
-        joystick->fd = -1;
+        jstkCloseDevice_bsd(joystick);
         return -1;
     }
 
     if (ioctl(joystick->fd, USB_GET_REPORT_ID, &report_id) < 0) {
         xf86Msg(X_ERROR, "Joystick: ioctl USB_GET_REPORT_ID failed: %s\n",
                 strerror(errno));
-        close(joystick->fd);
-        joystick->fd = -1;
+        jstkCloseDevice_bsd(joystick);
         return -1;
     }
 
     bsddata = (struct jstk_bsd_hid_data*)
               malloc(sizeof(struct jstk_bsd_hid_data));
+    joystick->devicedata = (void*) bsddata;
+
     bsddata->dlen = hid_report_size(rd, hid_input, report_id);
 
     if ((bsddata->data_buf = malloc(bsddata->dlen)) == NULL) {
         fprintf(stderr, "error: couldn't malloc %d bytes\n", bsddata->dlen);
         hid_dispose_report_desc(rd);
-        free(bsddata);
-        close(joystick->fd);
-        joystick->fd = -1;
+        jstkCloseDevice_bsd(joystick);
         return -1;
     }
 
@@ -181,14 +179,11 @@ jstkOpenDevice_bsd(JoystickDevPtr joystick, Bool probe)
     if (!got_something) {
         free(bsddata->data_buf);
         xf86Msg(X_ERROR, "Joystick: Didn't find any usable axes.\n");
-        free(bsddata);
-        close(joystick->fd);
-        joystick->fd = -1;
+        jstkCloseDevice_bsd(joystick);
         return -1;
     }
 
     bsddata->hotdata = 0;
-    joystick->devicedata = (void*) bsddata;
     if (probe == TRUE) {
         xf86Msg(X_INFO, "Joystick: %d buttons, %d axes\n", 
                 joystick->num_buttons, joystick->num_axes);
@@ -222,6 +217,7 @@ jstkCloseDevice_bsd(JoystickDevPtr joystick)
         if (((struct jstk_bsd_hid_data*)joystick->devicedata)->data_buf)
             free(((struct jstk_bsd_hid_data*)joystick->devicedata)->data_buf);
         free(joystick->devicedata);
+        joystick->devicedata = NULL;
     }
 }
 
