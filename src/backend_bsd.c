@@ -91,10 +91,12 @@ jstkOpenDevice_bsd(JoystickDevPtr joystick, Bool probe)
     report_desc_t rd;
     struct jstk_bsd_hid_data *bsddata;
 
-    if ((joystick->fd = open(joystick->device, O_RDWR | O_NDELAY, 0)) < 0) {
-        xf86Msg(X_ERROR, "Cannot open joystick '%s' (%s)\n", joystick->device,
-                strerror(errno));
-        return -1;
+    if (joystick->fd == -1) {
+        if ((joystick->fd = open(joystick->device, O_RDWR | O_NDELAY, 0)) < 0) {
+            xf86Msg(X_ERROR, "Cannot open joystick '%s' (%s)\n",
+                    joystick->device, strerror(errno));
+            return -1;
+        }
     }
 
     if ((rd = hid_get_report_desc(joystick->fd)) == 0) {

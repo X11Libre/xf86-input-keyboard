@@ -80,6 +80,9 @@ jstkOpenDevice(JoystickDevPtr priv, BOOL probe)
     int fd;
     fd = -1;
 
+    if (priv->joystick_device->flags & XI86_SERVER_FD)
+        priv->fd = priv->joystick_device->fd;
+
     if (probe == FALSE && priv->open_proc)
         return priv->open_proc(priv, probe);
 
@@ -112,7 +115,8 @@ jstkOpenDevice(JoystickDevPtr priv, BOOL probe)
 void jstkCloseDevice(JoystickDevPtr priv)
 {
     if ((priv->fd >= 0)) {
-      xf86CloseSerial(priv->fd);
+      if (!(priv->joystick_device->flags & XI86_SERVER_FD))
+          xf86CloseSerial(priv->fd);
       priv->fd = -1;
     }
 }
@@ -434,7 +438,8 @@ jstkDeviceControlProc(DeviceIntPtr       pJstk,
 
         if (pInfo->fd >= 0)
             RemoveEnabledDevice(pInfo->fd);
-        pInfo->fd = -1;
+        if (!(pInfo->flags & XI86_SERVER_FD))
+            pInfo->fd = -1;
         if (priv->close_proc)
             priv->close_proc(priv);
         pJstk->public.on = FALSE;
@@ -485,7 +490,8 @@ jstkCorePreInit(InputDriverPtr drv, InputInfoPtr pInfo, int flags)
     pInfo->read_input = jstkReadProc;
     pInfo->control_proc = NULL;
     pInfo->switch_mode = NULL;
-    pInfo->fd = -1;
+    if (!(pInfo->flags & XI86_SERVER_FD))
+        pInfo->fd = -1;
     pInfo->dev = NULL;
     pInfo->type_name = XI_JOYSTICK;
 
@@ -506,6 +512,7 @@ jstkCorePreInit(InputDriverPtr drv, InputInfoPtr pInfo, int flags)
     priv->mouse_enabled = TRUE;
     priv->keys_enabled = TRUE;
     priv->amplify = 1.0f;
+    priv->joystick_device = pInfo;
     priv->keyboard_device = keyboard_device;
     priv->num_axes    = MAXAXES;
     priv->num_buttons = MAXBUTTONS;
@@ -682,7 +689,11 @@ _X_EXPORT InputDriverRec JOYSTICK = {
     NULL,
     jstkCorePreInit,
     jstkCoreUnInit,
-    NULL
+    NULL,
+    NULL,
+#ifdef XI86_DRV_CAP_SERVER_FD
+    XI86_DRV_CAP_SERVER_FD
+#endif
 };
 
 /*

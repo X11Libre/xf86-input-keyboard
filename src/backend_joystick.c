@@ -72,10 +72,12 @@ jstkOpenDevice_joystick(JoystickDevPtr joystick, Bool probe)
     unsigned char axes, buttons;
     int driver_version;
 
-    if ((joystick->fd = open(joystick->device, O_RDONLY | O_NDELAY, 0)) < 0) {
-        xf86Msg(X_ERROR, "Cannot open joystick '%s' (%s)\n", 
-                joystick->device, strerror(errno));
-        return -1;
+    if (joystick->fd == -1) {
+        if ((joystick->fd = open(joystick->device, O_RDONLY | O_NDELAY, 0)) < 0) {
+            xf86Msg(X_ERROR, "Cannot open joystick '%s' (%s)\n",
+                    joystick->device, strerror(errno));
+            return -1;
+        }
     }
 
     if (ioctl(joystick->fd, JSIOCGVERSION, &driver_version) == -1) {

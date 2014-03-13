@@ -90,10 +90,12 @@ jstkOpenDevice_evdev(JoystickDevPtr joystick, Bool probe)
     unsigned long key_bits[NBITS(KEY_MAX)];
     int axes, buttons, j;
 
-    if ((joystick->fd = open(joystick->device, O_RDONLY | O_NDELAY, 0)) < 0) {
-        xf86Msg(X_ERROR, "Cannot open joystick '%s' (%s)\n", 
-                joystick->device, strerror(errno));
-        return -1;
+    if (joystick->fd == -1) {
+        if ((joystick->fd = open(joystick->device, O_RDONLY | O_NDELAY, 0)) < 0) {
+            xf86Msg(X_ERROR, "Cannot open joystick '%s' (%s)\n",
+                    joystick->device, strerror(errno));
+            return -1;
+        }
     }
 
     if (ioctl(joystick->fd, EVIOCGVERSION, &driver_version) == -1) {
