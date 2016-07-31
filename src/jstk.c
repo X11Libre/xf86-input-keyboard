@@ -147,7 +147,7 @@ jstkReadProc(InputInfoPtr pInfo)
             xf86Msg(X_WARNING, "JOYSTICK: Read failed. Deactivating device.\n");
 
             if (pInfo->fd >= 0)
-                RemoveEnabledDevice(pInfo->fd);
+                xf86RemoveEnabledDevice(pInfo);
             return;
         }
 
@@ -414,7 +414,7 @@ jstkDeviceControlProc(DeviceIntPtr       pJstk,
         if (jstkOpenDevice(priv, FALSE) != -1) {
             pJstk->public.on = TRUE;
             pInfo->fd = priv->fd;
-            AddEnabledDevice(pInfo->fd);
+            xf86AddEnabledDevice(pInfo);
         } else return !Success;
         break;
 
@@ -437,7 +437,7 @@ jstkDeviceControlProc(DeviceIntPtr       pJstk,
         }
 
         if (pInfo->fd >= 0)
-            RemoveEnabledDevice(pInfo->fd);
+            xf86RemoveEnabledDevice(pInfo);
         if (!(pInfo->flags & XI86_SERVER_FD))
             pInfo->fd = -1;
         if (priv->close_proc)
@@ -772,4 +772,3 @@ _X_EXPORT XF86ModuleData joystickModuleData = {
 };
 
 /* vim: set filetype=c.doxygen ts=4 et: */
-
