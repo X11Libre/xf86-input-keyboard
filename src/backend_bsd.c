@@ -44,6 +44,9 @@
 #include <usbhid.h>
 #include <dev/usb/usb.h>
 #include <dev/usb/usbhid.h>
+#ifdef HAVE_DEV_HID_HID_H
+    #include <dev/hid/hid.h>
+#endif
 #ifdef HAVE_DEV_USB_USB_IOCTL_H
     #include <dev/usb/usb_ioctl.h>
 #endif

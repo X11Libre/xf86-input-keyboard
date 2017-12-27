@@ -100,6 +100,7 @@ AC_CHECK_HEADERS([usbhid.h dev/usb/usbhid.h],, [bsd_backend=no],
 #include <dev/usb/usb.h>
 #endif
 ]])
+AC_CHECK_HEADERS([dev/hid/hid.h])
 AC_CHECK_LIB([usbhid],[hid_get_item],, [bsd_backend=no])
 AM_CONDITIONAL(BSD_BACKEND, [test "x$bsd_backend" = xyes])
 if test "x$bsd_backend" = xyes; then
