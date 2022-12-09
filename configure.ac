@@ -23,8 +23,8 @@
 # Initialize Autoconf
 AC_PREREQ([2.60])
 AC_INIT([xf86-input-joystick],
-        [1.6.3],
-        [https://gitlab.freedesktop.org/xorg/driver/xf86-input-joystick/issues],
+        [1.6.4],
+        [https://gitlab.freedesktop.org/xorg/driver/xf86-input-joystick/-/issues],
         [xf86-input-joystick])
 AC_CONFIG_SRCDIR([Makefile.am])
 AC_CONFIG_HEADERS([config.h])
