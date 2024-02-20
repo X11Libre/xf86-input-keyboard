@@ -48,7 +48,7 @@ XORG_DRIVER_CHECK_EXT(XINPUT, inputproto)
 XORG_DRIVER_CHECK_EXT(XKB, kbproto)
 
 # Checks for pkg-config packages
-PKG_CHECK_MODULES(XORG, [xorg-server >= 1.9.99.2] xproto $REQUIRED_MODULES)
+PKG_CHECK_MODULES(XORG, [xorg-server >=  1.18.99.2] xproto $REQUIRED_MODULES)
 
 DRIVER_NAME=joystick
 AC_SUBST([DRIVER_NAME])

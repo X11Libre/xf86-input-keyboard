@@ -59,14 +59,14 @@ jstkAxisTimer(OsTimerPtr        timer,
     InputInfoPtr          pInfo = device->public.devicePrivate;
     JoystickDevPtr        priv  = pInfo->private;
 
-    int sigstate, i;
+    int i;
     int nexttimer;
     int movex,movey,movezx,movezy;
 
     nexttimer = 0;
     movex = movey = movezx = movezy = 0;
 
-    sigstate = xf86BlockSIGIO();
+    input_lock();
 
     for (i=0; i<MAXAXES; i++) if ((priv->axis[i].value != 0) &&
                                   (priv->axis[i].type != JSTK_TYPE_NONE)) {
@@ -306,7 +306,7 @@ jstkAxisTimer(OsTimerPtr        timer,
 
         DBG(2, ErrorF("Stopping Axis Timer\n"));
     }
-    xf86UnblockSIGIO (sigstate);
+    input_unlock();
     return nexttimer;
 }
 
@@ -464,12 +464,12 @@ jstkPWMAxisTimer(OsTimerPtr        timer,
     InputInfoPtr          pInfo = device->public.devicePrivate;
     JoystickDevPtr        priv  = pInfo->private;
 
-    int sigstate, i;
+    int i;
     int nexttimer;
 
     nexttimer = 0;
 
-    sigstate = xf86BlockSIGIO();
+    input_lock();
 
     for (i=0; i<MAXAXES; i++)
         if (priv->axis[i].timer == timer) /* The timer handles only one axis! Find it. */
@@ -576,7 +576,7 @@ jstkPWMAxisTimer(OsTimerPtr        timer,
         break;
     }
 
-    xf86UnblockSIGIO (sigstate);
+    input_unlock();
     return nexttimer;
 }
 
