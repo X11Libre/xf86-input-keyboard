@@ -84,15 +84,15 @@ SetKbdLeds(InputInfoPtr pInfo, int leds)
     KbdDevPtr pKbd = (KbdDevPtr) pInfo->private;
     int real_leds = 0;
 
-#ifdef LED_CAP
-    if (leds & XLED1)  real_leds |= LED_CAP;
+#ifdef LED_CAPS_LOCK
+    if (leds & XLED1)  real_leds |= LED_CAPS_LOCK;
 #endif
-#ifdef LED_NUM
-    if (leds & XLED2)  real_leds |= LED_NUM;
+#ifdef LED_NUM_LOCK
+    if (leds & XLED2)  real_leds |= LED_NUM_LOCK;
 #endif
-#ifdef LED_SCR
-    if (leds & XLED3)  real_leds |= LED_SCR;
-    if (leds & XLED4)  real_leds |= LED_SCR;
+#ifdef LED_SCROLL_LOCK
+    if (leds & XLED3)  real_leds |= LED_SCROLL_LOCK;
+    if (leds & XLED4)  real_leds |= LED_SCROLL_LOCK;
 #endif
 
     switch (pKbd->consType) {
@@ -140,14 +140,14 @@ GetKbdLeds(InputInfoPtr pInfo)
 #endif
     }
 
-#ifdef LED_CAP
-    if (real_leds & LED_CAP) leds |= XLED1;
+#ifdef LED_CAPS_LOCK
+    if (real_leds & LED_CAPS_LOCK) leds |= XLED1;
 #endif
-#ifdef LED_NUM
-    if (real_leds & LED_NUM) leds |= XLED2;
+#ifdef LED_NUM_LOCK
+    if (real_leds & LED_NUM_LOCK) leds |= XLED2;
 #endif
-#ifdef LED_SCR
-    if (real_leds & LED_SCR) leds |= XLED3;
+#ifdef LED_SCROLL_LOCK
+    if (real_leds & LED_SCROLL_LOCK) leds |= XLED3;
 #endif
 
     return(leds);
