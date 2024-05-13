@@ -315,8 +315,9 @@ jstkDeviceControlProc(DeviceIntPtr       pJstk,
     int i;
     InputInfoPtr     pInfo = (InputInfoPtr)pJstk->public.devicePrivate;
     JoystickDevPtr   priv  = pInfo->private;
-    Atom             btn_labels[BUTTONMAP_SIZE+1] = {0}; /* TODO: fillme */
-    Atom             axes_labels[MAXAXES] = {0}; /* TODO: fillme */
+    Atom             btn_labels[BUTTONMAP_SIZE+1] = {0};
+    Atom             xorg_btn_labels[11] = {0};
+    Atom             axes_labels[MAXAXES] = {0};
 
     switch (what) {
     case DEVICE_INIT: {
@@ -333,13 +334,24 @@ jstkDeviceControlProc(DeviceIntPtr       pJstk,
             priv->close_proc(priv);
         }
 
+        xorg_btn_labels[0] = XIGetKnownProperty(BTN_LABEL_PROP_BTN_LEFT);
+        xorg_btn_labels[1] = XIGetKnownProperty(BTN_LABEL_PROP_BTN_MIDDLE);
+        xorg_btn_labels[2] = XIGetKnownProperty(BTN_LABEL_PROP_BTN_RIGHT);
+        xorg_btn_labels[3] = XIGetKnownProperty(BTN_LABEL_PROP_BTN_WHEEL_UP);
+        xorg_btn_labels[4] = XIGetKnownProperty(BTN_LABEL_PROP_BTN_WHEEL_DOWN);
+        xorg_btn_labels[5] = XIGetKnownProperty(BTN_LABEL_PROP_BTN_HWHEEL_LEFT);
+        xorg_btn_labels[6] = XIGetKnownProperty(BTN_LABEL_PROP_BTN_HWHEEL_RIGHT);
+        xorg_btn_labels[7] = XIGetKnownProperty(BTN_LABEL_PROP_BTN_SIDE);
+        xorg_btn_labels[8] = XIGetKnownProperty(BTN_LABEL_PROP_BTN_EXTRA);
+        xorg_btn_labels[9] = XIGetKnownProperty(BTN_LABEL_PROP_BTN_FORWARD);
+        xorg_btn_labels[10] = XIGetKnownProperty(BTN_LABEL_PROP_BTN_BACK);        
+
         for (m=0; m<=BUTTONMAP_SIZE; m++) {
-            sprintf(str, "Button %d", m);
-
+            if (m <= 10) {
+                btn_labels[m] = xorg_btn_labels[m];
+            }
             buttonmap[m] = m;
-            btn_labels[m] = MakeAtom(str, strlen(str), TRUE);
         }
-
 
 
         if (InitButtonClassDeviceStruct(pJstk, BUTTONMAP_SIZE, 
@@ -370,33 +382,34 @@ jstkDeviceControlProc(DeviceIntPtr       pJstk,
             InitValuatorAxisStruct(pJstk,
                                    0, /* valuator num */
                                    XIGetKnownProperty(AXIS_LABEL_PROP_REL_X),
-                                   0, /* min val */
-                                   screenInfo.screens[0]->width, /* max val */
-                                   1, /* resolution */
+                                   -1, /* min val */
+                                   -1, /* max val */
+                                   0, /* resolution */
                                    0, /* min_res */
-                                   1, /* max_res */
-                                   Absolute);
+                                   0, /* max_res */
+                                   Relative);
             InitValuatorAxisStruct(pJstk,
                                    1, /* valuator num */
                                    XIGetKnownProperty(AXIS_LABEL_PROP_REL_Y),
-                                   0, /* min val */
-                                   screenInfo.screens[0]->height, /* max val */
-                                   1, /* resolution */
+                                   -1, /* min val */
+                                   -1, /* max val */
+                                   0, /* resolution */
                                    0, /* min_res */
-                                   1, /* max_res */
-                                   Absolute);
+                                   0, /* max_res */
+                                   Relative);
             for (i=0; i<MAXAXES; i++) 
                 if (priv->axis[i].valuator != -1)
             {
+                
                 InitValuatorAxisStruct(pJstk,
                                        priv->axis[i].valuator,
                                        axes_labels[i],
-                                       -32768, /* min val */
-                                       32767,  /* max val */
-                                       1, /* resolution */
+                                       -1, /* min val */
+                                       -1,  /* max val */
+                                       0, /* resolution */
                                        0, /* min_res */
-                                       1, /* max_res */
-                                       Absolute);
+                                       0, /* max_res */
+                                       Relative);
             }
             /* allocate the motion history buffer if needed */
             xf86MotionHistoryAllocate(pInfo);
