@@ -32,6 +32,16 @@
 #include "config.h"
 #endif
 
+#include <linux/joystick.h>
+
+/* workaround for name clash between joystick.h and xf86str.h */
+#undef BUS_NONE
+#undef BUS_PCI
+#undef BUS_SBUS
+#undef BUS_PLATFORM
+#undef BUS_USB
+#undef BUS_last
+
 #include <xorg-server.h>
 #include <unistd.h>
 #include <sys/types.h>
@@ -40,7 +50,6 @@
 #include <errno.h>
 #include <string.h>
 #include <stdlib.h>
-#include <linux/joystick.h>
 
 #include <xf86.h>
 #include <xf86_OSproc.h>
