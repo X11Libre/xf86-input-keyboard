@@ -287,6 +287,10 @@ KbdOff(InputInfoPtr pInfo, int what)
     return Success;
 }
 
+#ifndef CONSOLE_X_BELL
+#define CONSOLE_X_BELL _IOW('t',123,int[2])
+#endif
+
 static void
 SoundBell(InputInfoPtr pInfo, int loudness, int pitch, int duration)
 {
