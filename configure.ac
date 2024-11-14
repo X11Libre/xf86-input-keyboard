@@ -23,8 +23,8 @@
 # Initialize Autoconf
 AC_PREREQ([2.60])
 AC_INIT([xf86-input-keyboard],
-        [2.0.0],
-        [https://gitlab.freedesktop.org/xorg/driver/xf86-input-keyboard/issues],
+        [2.1.0],
+        [https://gitlab.freedesktop.org/xorg/driver/xf86-input-keyboard/-/issues],
         [xf86-input-keyboard])
 AC_CONFIG_SRCDIR([Makefile.am])
 AC_CONFIG_HEADERS([config.h])
