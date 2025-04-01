@@ -4,7 +4,7 @@
 # Please see the ci-templates documentation for details:
 # https://freedesktop.pages.freedesktop.org/ci-templates/
 
-.templates_sha: &template_sha 81f66518561308ef294142663198f0890c99d195 # see https://docs.gitlab.com/ee/ci/yaml/#includefile
+.templates_sha: &template_sha 34026b8f513919cd905093d9e9320a81f8b81f9d # see https://docs.gitlab.com/ee/ci/yaml/#includefile
 
 
 include:
@@ -87,6 +87,8 @@ container-prep:
 #
 build:
   stage: build
+  tags:
+    - kvm
   extends:
     - .fdo.distribution-image@freebsd
   variables:
