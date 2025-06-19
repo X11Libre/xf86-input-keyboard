@@ -1,4 +1,4 @@
-kbd - Keyboard input driver for non-Linux platforms for the Xorg X server
+kbd - Keyboard input driver for the Xorg X server
 -------------------------------------------------------------------------
 
 This keyboard driver is primarily used with BSD, GNU Hurd, illumos, & Solaris
