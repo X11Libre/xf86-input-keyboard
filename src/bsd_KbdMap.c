@@ -20,7 +20,7 @@
 
 #include "xf86.h"
 #include "xf86Priv.h"
-#include "xf86_OSlib.h" 
+#include "xf86_OSlib.h"
 #include "xf86Xinput.h"
 #include "xf86OSKbd.h"
 #include "atKeynames.h"
@@ -50,7 +50,7 @@ static unsigned char remap[NUM_KEYCODES] = {
      0,    0,    0,    0,    0,    0,    0,    0,   /* 0x78 - 0x7f */
 };
 
-/* This table assumes the ibm code page 437 coding for characters 
+/* This table assumes the ibm code page 437 coding for characters
  * > 0x80. They are returned in this form by PCVT */
 static KeySym eascii_to_x[512] = {
 	NoSymbol,	NoSymbol,	NoSymbol,	NoSymbol,
@@ -118,7 +118,7 @@ static KeySym eascii_to_x[512] = {
 	XK_degree,	NoSymbol,	NoSymbol,	XK_radical,
 	XK_Greek_eta,	XK_twosuperior,	XK_periodcentered, NoSymbol,
 
-	/* 
+	/*
 	 * special marked entries (256 + x)
 	 */
 
@@ -214,7 +214,7 @@ static CARD8 wsUsbMap[] = {
 	/* 1 */ KEY_NOTUSED,
 	/* 2 */ KEY_NOTUSED,
 	/* 3 */ KEY_NOTUSED,
-	/* 4 */ KEY_A,		
+	/* 4 */ KEY_A,
 	/* 5 */ KEY_B,
 	/* 6 */ KEY_C,
 	/* 7 */ KEY_D,
@@ -775,7 +775,7 @@ static CARD8 wsAdbMap[] = {
 	/* 69 */ KEY_KP_Plus,
 	/* 70 */ KEY_NOTUSED,
 	/* 71 */ KEY_NumLock,	/* Clear */
-	/* 72 */ KEY_NOTUSED, 
+	/* 72 */ KEY_NOTUSED,
 	/* 73 */ KEY_NOTUSED,
 	/* 74 */ KEY_NOTUSED,
 	/* 75 */ KEY_KP_Divide,
@@ -1272,7 +1272,7 @@ KbdGetMapping (InputInfoPtr pInfo, KeySymsPtr pKeySyms, CARD8 *pModMap)
   case PCVT:
     {
       keymap_t keymap;
-    
+
       if (ioctl(pInfo->fd, GIO_KEYMAP, &keymap) != -1) {
 	for (i = 0; i < keymap.n_keys && i < NUM_KEYCODES; i++)
 	  if (remap[i]) {
@@ -1291,8 +1291,8 @@ KbdGetMapping (InputInfoPtr pInfo, KeySymsPtr pKeySyms, CARD8 *pModMap)
     }
     break;
 #endif /* SYSCONS || PCVT */
-    
-  } 
+
+  }
 #endif /* !bsdi */
 
   /*
@@ -1300,32 +1300,32 @@ KbdGetMapping (InputInfoPtr pInfo, KeySymsPtr pKeySyms, CARD8 *pModMap)
    */
   for (i = 0; i < MAP_LENGTH; i++)
     pModMap[i] = NoSymbol;  /* make sure it is restored */
-  
+
   for (k = map, i = MIN_KEYCODE;
        i < (NUM_KEYCODES + MIN_KEYCODE);
        i++, k += 4)
-    
+
     switch(*k) {
-      
+
     case XK_Shift_L:
     case XK_Shift_R:
       pModMap[i] = ShiftMask;
       break;
-      
+
     case XK_Control_L:
     case XK_Control_R:
       pModMap[i] = ControlMask;
       break;
-      
+
     case XK_Caps_Lock:
       pModMap[i] = LockMask;
       break;
-      
+
     case XK_Alt_L:
     case XK_Alt_R:
       pModMap[i] = AltMask;
       break;
-      
+
     case XK_Num_Lock:
       pModMap[i] = NumLockMask;
       break;
@@ -1350,7 +1350,7 @@ KbdGetMapping (InputInfoPtr pInfo, KeySymsPtr pKeySyms, CARD8 *pModMap)
   pKeySyms->map        = map;
   pKeySyms->mapWidth   = GLYPHS_PER_KEY;
   pKeySyms->minKeyCode = MIN_KEYCODE;
-  pKeySyms->maxKeyCode = MAX_KEYCODE; 
+  pKeySyms->maxKeyCode = MAX_KEYCODE;
 
   switch(pKbd->consType) {
 #ifdef SYSCONS_SUPPORT
@@ -1381,9 +1381,9 @@ KbdGetMapping (InputInfoPtr pInfo, KeySymsPtr pKeySyms, CARD8 *pModMap)
 #endif
                     pKbd->scancodeMap = &wsUsb;
                     break;
-#ifdef WSKBD_TYPE_ADB	
+#ifdef WSKBD_TYPE_ADB
 	       case WSKBD_TYPE_ADB:
-                    pKbd->scancodeMap = &wsAdb; 
+                    pKbd->scancodeMap = &wsAdb;
                     break;
 #endif
 #ifdef WSKBD_TYPE_LK201

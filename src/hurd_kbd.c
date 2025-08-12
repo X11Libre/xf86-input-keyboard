@@ -50,7 +50,7 @@
 typedef unsigned short kev_type;		/* kd event type */
 typedef unsigned char Scancode;
 
-struct mouse_motion {		
+struct mouse_motion {
     short mm_deltaX;		/* units? */
     short mm_deltaY;
 };
@@ -65,7 +65,7 @@ typedef struct {
     } value;
 } kd_event;
 
-/* 
+/*
  * kd_event ID's.
  */
 #define MOUSE_LEFT	1		/* mouse left button up/down */
@@ -77,19 +77,19 @@ typedef struct {
 /***********************************************************************
  * Keyboard
  **********************************************************************/
-static void 
+static void
 SoundKbdBell(InputInfoPtr pInfo, int loudness,int pitch,int duration)
 {
     return;
 }
 
-static void 
+static void
 SetKbdLeds(InputInfoPtr pInfo, int leds)
 {
     return;
 }
 
-static int 
+static int
 GetKbdLeds(InputInfoPtr pInfo)
 {
     return 0;

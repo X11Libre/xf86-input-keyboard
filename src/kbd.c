@@ -155,7 +155,7 @@ KbdPreInit(InputDriverPtr drv, InputInfoPtr pInfo, int flags)
 
     defaults = kbdDefaults;
     xf86CollectInputOptions(pInfo, defaults);
-    xf86ProcessCommonOptions(pInfo, pInfo->options); 
+    xf86ProcessCommonOptions(pInfo, pInfo->options);
 
     if (!(pKbd = calloc(1, sizeof(KbdDevRec)))) {
         rc = BadAlloc;
@@ -411,7 +411,7 @@ PostKbdEvent(InputInfoPtr pInfo, unsigned int scanCode, Bool down)
          return;
   } else {
      if (pKbd->scancodeMap != NULL) {
-         TransMapPtr map = pKbd->scancodeMap; 
+         TransMapPtr map = pKbd->scancodeMap;
          if (scanCode >= map->begin && scanCode < map->end)
              scanCode = map->map[scanCode - map->begin];
      }
