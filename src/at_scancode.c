@@ -122,7 +122,7 @@ ATScancode(InputInfoPtr pInfo, int *scanCode)
                  *scanCode += 0x78;
           }
        break;
-       case KEY_Prefix1: 
+       case KEY_Prefix1:
             pKbd->scanPrefix = (*scanCode == KEY_LCtrl) ? KEY_LCtrl : 0;
             return TRUE;
        case KEY_LCtrl:

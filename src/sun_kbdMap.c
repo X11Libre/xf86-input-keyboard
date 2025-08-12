@@ -343,7 +343,7 @@ static unsigned char usbmap[256] = {
 	/* 1 */ KEY_NOTUSED,
 	/* 2 */ KEY_NOTUSED,
 	/* 3 */ KEY_NOTUSED,
-	/* 4 */ KEY_A,		
+	/* 4 */ KEY_A,
 	/* 5 */ KEY_B,
 	/* 6 */ KEY_C,
 	/* 7 */ KEY_D,
@@ -588,7 +588,7 @@ KbdGetMapping (InputInfoPtr pInfo, KeySymsPtr pKeySyms, CARD8 *pModMap)
     sunKbdPrivPtr priv = (sunKbdPrivPtr) pKbd->private;
     int i;
     KeySym        *k;
-    
+
 #if defined(KB_USB)
     if (priv->ktype == KB_USB)
 	pKbd->scancodeMap = &usbTransMap;
@@ -599,7 +599,7 @@ KbdGetMapping (InputInfoPtr pInfo, KeySymsPtr pKeySyms, CARD8 *pModMap)
     /*
      * Add Sun keyboard keysyms to default map
      */
-#define map_for_key(k,c) 	map[(k * GLYPHS_PER_KEY) + c]   
+#define map_for_key(k,c) 	map[(k * GLYPHS_PER_KEY) + c]
     map_for_key(KEY_Power,	0) = SunXK_PowerSwitch;
     map_for_key(KEY_Power,	1) = SunXK_PowerSwitchShift;
     map_for_key(KEY_Mute,	0) = SunXK_AudioMute;
@@ -622,38 +622,38 @@ KbdGetMapping (InputInfoPtr pInfo, KeySymsPtr pKeySyms, CARD8 *pModMap)
     map_for_key(KEY_F11,	0) = SunXK_F36;
     map_for_key(KEY_F12,	0) = SunXK_F37;
     map_for_key(KEY_Menu,	0) = XK_Multi_key;
-    
+
     /*
      * compute the modifier map
      */
     for (i = 0; i < MAP_LENGTH; i++)
 	pModMap[i] = NoSymbol;  /* make sure it is restored */
-  
+
     for (k = map, i = MIN_KEYCODE;
 	 i < (NUM_KEYCODES + MIN_KEYCODE);
 	 i++, k += 4)
     {
 	switch(*k) {
-      
+
 	case XK_Shift_L:
 	case XK_Shift_R:
 	    pModMap[i] = ShiftMask;
 	    break;
-      
+
 	case XK_Control_L:
 	case XK_Control_R:
 	    pModMap[i] = ControlMask;
 	    break;
-      
+
 	case XK_Caps_Lock:
 	    pModMap[i] = LockMask;
 	    break;
-      
+
 	case XK_Alt_L:
 	case XK_Alt_R:
 	    pModMap[i] = AltMask;
 	    break;
-      
+
 	case XK_Num_Lock:
 	    pModMap[i] = NumLockMask;
 	    break;
@@ -675,7 +675,7 @@ KbdGetMapping (InputInfoPtr pInfo, KeySymsPtr pKeySyms, CARD8 *pModMap)
 
 	}
     }
-	
+
     pKeySyms->map        = map;
     pKeySyms->mapWidth   = GLYPHS_PER_KEY;
     pKeySyms->minKeyCode = MIN_KEYCODE;
