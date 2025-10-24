@@ -459,9 +459,19 @@ OpenKeyboard(InputInfoPtr pInfo)
                printWsType("ADB", pInfo->name);
                break;
 #endif
+#ifdef WSKBD_TYPE_AMIGA
+           case WSKBD_TYPE_AMIGA:
+               printWsType("Amiga", pInfo->name);
+               break;
+#endif
 #ifdef WSKBD_TYPE_LK201
            case WSKBD_TYPE_LK201:
                printWsType("LK201", pInfo->name);
+               break;
+#endif
+#ifdef WSKBD_TYPE_LK401
+           case WSKBD_TYPE_LK401:
+               printWsType("LK401", pInfo->name);
                break;
 #endif
 #ifdef WSKBD_TYPE_MAPLE
