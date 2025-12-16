@@ -2,7 +2,7 @@
 .ds q \N'34'
 .TH KBD __drivermansuffix__ 2025-06-01 __vendorversion__
 .SH NAME
-kbd \- Xorg keyboard input driver
+kbd \- XLibre keyboard input driver
 .SH SYNOPSIS
 .nf
 .B "Section \*qInputDevice\*q"
@@ -13,13 +13,10 @@ kbd \- Xorg keyboard input driver
 .fi
 .SH DESCRIPTION
 .B kbd
-is an Xorg input driver for keyboards.
+is an XLibre input driver for keyboards.
 The driver supports the standard OS-provided keyboard interface,
 but these are currently only available to this driver module for
 GNU Hurd, BSD, and Solaris.
-This driver is the replacement for the built-in
-.B keyboard
-driver formerly included in Xorg 1.3 and earlier releases.
 .PP
 The
 .B kbd
@@ -142,7 +139,7 @@ EndSection
 .RE
 .fi
 .SH "SEE ALSO"
-.BR Xorg (__appmansuffix__),
+.BR XLibre (__appmansuffix__),
 .BR xorg.conf (__filemansuffix__),
 .BR Xserver (__appmansuffix__),
 .BR X (__miscmansuffix__).
