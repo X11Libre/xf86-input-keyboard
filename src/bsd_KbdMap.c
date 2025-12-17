@@ -5,10 +5,7 @@
  * which is Copyright 1990,91 by Thomas Roell, Dinkelscherben, Germany.
  * and from xf86KbdCODrv.c by Holger Veit
  */
-
-#ifdef HAVE_CONFIG_H
 #include "config.h"
-#endif
 
 #include <xorg-server.h>
 #include <X11/X.h>

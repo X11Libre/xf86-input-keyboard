@@ -3,10 +3,7 @@
  *
  * Copyright 1990,91 by Thomas Roell, Dinkelscherben, Germany.
  */
-
-#ifdef HAVE_CONFIG_H
 #include "config.h"
-#endif
 
 #include <xorg-server.h>
 #include <X11/X.h>
