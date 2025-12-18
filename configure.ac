@@ -100,7 +100,5 @@ AM_CONDITIONAL(BSD, [test "x$IS_BSD" = xyes])
 AM_CONDITIONAL(SOLARIS, [test "x$IS_SOLARIS" = xyes])
 AM_CONDITIONAL(HURD, [test "x$IS_HURD" = xyes])
 
-AC_CONFIG_FILES([Makefile
-                 src/Makefile
-                 man/Makefile])
+AC_CONFIG_FILES([Makefile src/Makefile man/Makefile])
 AC_OUTPUT
