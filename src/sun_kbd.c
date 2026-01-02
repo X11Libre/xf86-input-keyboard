@@ -102,7 +102,7 @@ KbdInit(InputInfoPtr pInfo, int what)
 {
     KbdDevPtr pKbd = (KbdDevPtr) pInfo->private;
     sunKbdPrivPtr priv = (sunKbdPrivPtr) pKbd->private;
-    pointer options = pInfo->options;
+    void *options = pInfo->options;
 
     int	ktype, klayout, i;
     const char *ktype_name;
@@ -424,7 +424,7 @@ CloseKeyboard(InputInfoPtr pInfo)
    list or changing pInfo->fd while xf86Wakeup is looping through the list
    causes server crashes */
 static CARD32
-RemoveKeyboard(OsTimerPtr timer, CARD32 time, pointer arg)
+RemoveKeyboard(OsTimerPtr timer, CARD32 time, void *arg)
 {
     InputInfoPtr pInfo = (InputInfoPtr) arg;
 
