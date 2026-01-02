@@ -57,7 +57,7 @@
 static int KbdPreInit(InputDriverPtr drv, InputInfoPtr pInfo, int flags);
 static int KbdProc(DeviceIntPtr device, int what);
 static void KbdCtrl(DeviceIntPtr device, KeybdCtrl *ctrl);
-static void KbdBell(int percent, DeviceIntPtr dev, pointer ctrl, int unused);
+static void KbdBell(int percent, DeviceIntPtr dev, void *ctrl, int unused);
 static void PostKbdEvent(InputInfoPtr pInfo, unsigned int key, Bool down);
 
 static void InitKBD(InputInfoPtr pInfo, Bool init);
@@ -116,8 +116,8 @@ static XF86ModuleVersionInfo xf86KbdVersionRec = {
     {0, 0, 0, 0}
 };
 
-static pointer
-xf86KbdPlug(pointer module, pointer options, int *errmaj, int *errmin)
+static void*
+xf86KbdPlug(void *module, void *options, int *errmaj, int *errmin)
 {
     xf86AddInputDriver(&KBD, module, 0);
     return module;
@@ -202,7 +202,7 @@ out:
 }
 
 static void
-KbdBell(int percent, DeviceIntPtr dev, pointer ctrl, int unused)
+KbdBell(int percent, DeviceIntPtr dev, void *ctrl, int unused)
 {
    InputInfoPtr pInfo = (InputInfoPtr) dev->public.devicePrivate;
    KbdDevPtr pKbd = (KbdDevPtr) pInfo->private;

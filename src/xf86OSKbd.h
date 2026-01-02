@@ -75,7 +75,7 @@ typedef struct {
     TransMapPtr         specialMap;
 
     /* os specific */
-    pointer		private;
+    void*		private;
     int			consType;
     int			wsKbdType;
     char		wsKbdDev[256];
