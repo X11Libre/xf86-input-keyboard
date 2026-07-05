@@ -114,8 +114,11 @@ static int
 KbdOff(InputInfoPtr pInfo, int what)
 {
     int data = 2;
-    if( ioctl( pInfo->fd, _IOW('k', 1, int),&data) < 0)
-	FatalError("can't reset keyboard mode (%s)\n",strerror(errno));
+    if (pInfo->fd >= 0) {
+        ioctl(pInfo->fd, _IOW('k', 1, int), &data);
+        close(pInfo->fd);
+        pInfo->fd = -1;
+    }
     return Success;
 }
 
@@ -137,7 +140,15 @@ ReadInput(InputInfoPtr pInfo)
 static Bool
 OpenKeyboard(InputInfoPtr pInfo)
 {
-    pInfo->fd = xf86Info.consoleFd;
+    char *dev = xf86SetStrOption(pInfo->options, "Device", "/dev/kbd");
+    pInfo->fd = open(dev, O_RDONLY | O_NONBLOCK);
+    if (pInfo->fd == -1) {
+        xf86Msg(X_ERROR, "%s: Cannot open \"%s\" (%s)\n",
+                pInfo->name, dev, strerror(errno));
+        free(dev);
+        return FALSE;
+    }
+    free(dev);
     return TRUE;
 }
 
