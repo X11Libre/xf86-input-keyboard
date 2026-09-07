@@ -14,38 +14,51 @@ jobs:
         steps:
             - uses: X11Libre/action-build-driver/target/ubuntu@v0.4.0
               with:
-                xserver-version: ${{ matrix.xserver-version }}
+                  xserver-version: ${{ matrix.xserver-version }}
 
     freebsd:
         strategy:
             matrix:
-                xserver-version: [ master, xlibre-xserver-25.1.0, xlibre-xserver-25.0.0.18 ]
+                include:
+                    - xserver-version: master
+                      action-version: v0.3.6
+                    - xserver-version: xlibre-xserver-25.1.0
+                      action-version: v0.4.0
+                    - xserver-version: xlibre-xserver-25.0.0.18
+                      action-version: v0.4.0
         runs-on: ubuntu-latest
         steps:
-            - uses: X11Libre/action-build-driver/target/freebsd@v0.4.0
+            - uses: X11Libre/action-build-driver/target/freebsd@${{ matrix.action-version }}
               with:
-                xserver-version: ${{ matrix.xserver-version }}
+                  xserver-version: ${{ matrix.xserver-version }}
 
     dragonfly:
         strategy:
             matrix:
-                # xlibre-xserver-25.0.x not compiling on dragonfly yet
-                xserver-version: [ master, xlibre-xserver-25.1.0 ]
+                include:
+                    - xserver-version: master
+                      action-version: v0.3.6
+                    - xserver-version: xlibre-xserver-25.1.0
+                      action-version: v0.4.0
         runs-on: ubuntu-latest
         steps:
-            - uses: X11Libre/action-build-driver/target/dragonfly@v0.4.0
+            - uses: X11Libre/action-build-driver/target/dragonfly@${{ matrix.action-version }}
               with:
-                xserver-version: ${{ matrix.xserver-version }}
+                  xserver-version: ${{ matrix.xserver-version }}
 
     netbsd:
         strategy:
             matrix:
-                xserver-version: [ master, xlibre-xserver-25.1.0 ]
+                include:
+                    - xserver-version: master
+                      action-version: v0.3.6
+                    - xserver-version: xlibre-xserver-25.1.0
+                      action-version: v0.4.0
         runs-on: ubuntu-latest
         steps:
-            - uses: X11Libre/action-build-driver/target/netbsd@v0.4.0
+            - uses: X11Libre/action-build-driver/target/netbsd@${{ matrix.action-version }}
               with:
-                xserver-version: ${{ matrix.xserver-version }}
+                  xserver-version: ${{ matrix.xserver-version }}
 
     release-notes:
         name:    Release pushed tag
