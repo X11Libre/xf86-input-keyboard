@@ -19,44 +19,31 @@ jobs:
     freebsd:
         strategy:
             matrix:
-                include:
-                    - xserver-version: master
-                      action-version: v0.3.6
-                    - xserver-version: xlibre-xserver-25.1.0
-                      action-version: v0.4.0
-                    - xserver-version: xlibre-xserver-25.0.0.18
-                      action-version: v0.4.0
+                xserver-version: [ master, xlibre-xserver-25.1.0, xlibre-xserver-25.0.0.18 ]
         runs-on: ubuntu-latest
         steps:
-            - uses: X11Libre/action-build-driver/target/freebsd@${{ matrix.action-version }}
+            - uses: X11Libre/action-build-driver/target/freebsd@v0.4.0
               with:
                   xserver-version: ${{ matrix.xserver-version }}
 
     dragonfly:
         strategy:
             matrix:
-                include:
-                    - xserver-version: master
-                      action-version: v0.3.6
-                    - xserver-version: xlibre-xserver-25.1.0
-                      action-version: v0.4.0
+                # xlibre-xserver-25.0.x not compiling on dragonfly yet
+                xserver-version: [ master, xlibre-xserver-25.1.0 ]
         runs-on: ubuntu-latest
         steps:
-            - uses: X11Libre/action-build-driver/target/dragonfly@${{ matrix.action-version }}
+            - uses: X11Libre/action-build-driver/target/dragonfly@v0.4.0
               with:
                   xserver-version: ${{ matrix.xserver-version }}
 
     netbsd:
         strategy:
             matrix:
-                include:
-                    - xserver-version: master
-                      action-version: v0.3.6
-                    - xserver-version: xlibre-xserver-25.1.0
-                      action-version: v0.4.0
+                xserver-version: [ master, xlibre-xserver-25.1.0 ]
         runs-on: ubuntu-latest
         steps:
-            - uses: X11Libre/action-build-driver/target/netbsd@${{ matrix.action-version }}
+            - uses: X11Libre/action-build-driver/target/netbsd@v0.4.0
               with:
                   xserver-version: ${{ matrix.xserver-version }}
 
